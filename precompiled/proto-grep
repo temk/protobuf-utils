@@ -1,0 +1,4 @@
+#!/bin/bash
+#
+#
+java -cp geom.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PGrep  "$@"

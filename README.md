@@ -55,27 +55,28 @@ Notes:
 * $$ previous message
 * use any brakets: [] {} ()
 
+'cd precompiled;, for runexamples
 
 #### Example I: find all polygons
-java -cp geom.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PGrep  -zbmq Shape "type == 'POLYGON'" shapes.bin.gz
+./proto-grep -zbmq Shape "type == 'POLYGON'" shapes.bin.gz
 
 #### Example II: find all squares where previous two shapes also square. print the first one.
-java -cp geom.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PGrep  -zbmq Shape 'type == "SQUARE" && $$.type == "SQUARE" && $$$.type == "SQUARE"' -p '$$$' shapes.bin.gz
+./proto-grep -zbmq Shape 'type == "SQUARE" && $$.type == "SQUARE" && $$$.type == "SQUARE"' -p '$$$' shapes.bin.gz
 
 #### Example III: find all squares with even width, print corner
-java -cp geom.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PGrep  -zbmq Shape 'type == "SQUARE" && shape@Square.width % 2 == 0' -p 'shape@Square.corner' shapes.bin.gz
+./proto-grep -zbmq Shape 'type == "SQUARE" && shape@Square.width % 2 == 0' -p 'shape@Square.corner' shapes.bin.gz
 
 #### Example IV: find all squares with width > corner.x * corner.y
-java -cp geom.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PGrep  -zbmq Shape 'type == "SQUARE" && shape@Square.width > shape@Square.corner.x * shape@Square.corner.y'  shapes.bin.gz
+./proto-grep -zbmq Shape 'type == "SQUARE" && shape@Square.width > shape@Square.corner.x * shape@Square.corner.y'  shapes.bin.gz
 
 #### Example V: The same as Example IV, but shorter version. 
-java -cp geom.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PGrep  -zbmq Shape 'type == "SQUARE" && shape@Square.{width > corner.{x * y}}'  shapes.bin.gz
+./proto-grep -zbmq Shape 'type == "SQUARE" && shape@Square.{width > corner.{x * y}}'  shapes.bin.gz
 
 #### Example VI: Find all polygons with polygons with point i,j s.t. points[i].x > points[i].y , print points indexs, and id of shape.
-java -cp geom.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PGrep  -zabmq Shape 'type == "POLYGON" && shape@Polygon.points[i].x >  shape@Polygon.points[j].y' -p 'id,i,j' shapes.bin.gz
+./proto-grep -zabmq Shape 'type == "POLYGON" && shape@Polygon.points[i].x >  shape@Polygon.points[j].y' -p 'id,i,j' shapes.bin.gz
 
 #### Example VII: Same as Example VI, but find all appearances. (flag -a)
-java -cp geom.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PGrep  -zabmq Shape  'type == "POLYGON" && shape@Polygon.points[i].x >  shape@Polygon.points[j].y' -p 'id,i,j' shapes.bin.gz
+./proto-grep -zabmq Shape  'type == "POLYGON" && shape@Polygon.points[i].x >  shape@Polygon.points[j].y' -p 'id,i,j' shapes.bin.gz
 
 ## FAQ
 TBA
