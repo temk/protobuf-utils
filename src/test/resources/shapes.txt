@@ -1,0 +1,160 @@
+type: CIRCLE
+id: 1
+[Circle.shape] {
+  center {
+    x: 1
+    y: 2
+  }
+  radius: 3
+}
+--
+type: CIRCLE
+id: 2
+[Circle.shape] {
+  center {
+    x: 2
+    y: 4
+  }
+  radius: 6
+}
+--
+type: CIRCLE
+id: 3
+[Circle.shape] {
+  center {
+    x: 3
+    y: 6
+  }
+  radius: 9
+}
+--
+type: CIRCLE
+id: 4
+[Circle.shape] {
+  center {
+    x: 4
+    y: 8
+  }
+  radius: 12
+}
+--
+type: CIRCLE
+id: 5
+[Circle.shape] {
+  center {
+    x: 5
+    y: 10
+  }
+  radius: 15
+}
+--
+type: SQUARE
+id: 6
+[Square.shape] {
+  corner {
+    x: 1
+    y: 2
+  }
+  width: 3
+}
+--
+type: SQUARE
+id: 7
+[Square.shape] {
+  corner {
+    x: 2
+    y: 4
+  }
+  width: 6
+}
+--
+type: SQUARE
+id: 8
+[Square.shape] {
+  corner {
+    x: 3
+    y: 6
+  }
+  width: 9
+}
+--
+type: SQUARE
+id: 9
+[Square.shape] {
+  corner {
+    x: 4
+    y: 8
+  }
+  width: 12
+}
+--
+type: SQUARE
+id: 10
+[Square.shape] {
+  corner {
+    x: 5
+    y: 10
+  }
+  width: 15
+}
+--
+type: POLYGON
+id: 11
+[Polygon.shape] {
+  points {
+    x: 0
+    y: 0
+  }
+}
+--
+type: POLYGON
+id: 12
+[Polygon.shape] {
+  points {
+    x: 0
+    y: 0
+  }
+  points {
+    x: 1
+    y: 2
+  }
+}
+--
+type: POLYGON
+id: 13
+[Polygon.shape] {
+  points {
+    x: 0
+    y: 0
+  }
+  points {
+    x: 1
+    y: 2
+  }
+  points {
+    x: 2
+    y: 4
+  }
+}
+--
+type: POLYGON
+id: 14
+[Polygon.shape] {
+  points {
+    x: 0
+    y: 0
+  }
+  points {
+    x: 1
+    y: 2
+  }
+  points {
+    x: 2
+    y: 4
+  }
+  points {
+    x: 3
+    y: 6
+  }
+}
+--

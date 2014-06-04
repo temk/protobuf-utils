@@ -1,0 +1,2 @@
+
+$.=== shape @ Polygon [$a] . (+ * 22 #points[$a] ) 

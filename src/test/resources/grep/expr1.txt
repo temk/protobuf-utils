@@ -1,0 +1,2 @@
+
+type == "POLYGON" && shape. (points[$a].((x + y) / $a) > points[$b].((x + y) / $b) || !#points) 

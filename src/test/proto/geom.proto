@@ -1,0 +1,63 @@
+option java_package = "net.katros.services.proto.test";
+
+enum TYPE {
+	SQUARE  = 1;
+	CIRCLE  = 2;
+	POLYGON = 3;
+}
+
+enum Color {
+	RED   = 1;
+	GREEN = 2;
+	BLUE  = 3;
+}
+
+message Point {
+	required fixed32 x = 1;
+	required fixed32 y = 2;
+}
+
+message Shape  {
+	required TYPE    type  = 1;
+    required fixed32 id    = 2;
+	optional Color color   = 3;
+
+	extensions 4 to max;
+}
+
+message Square  {
+	extend Shape {
+		required Square shape = 5;
+	}  
+
+	required Point   corner = 1;
+	required fixed32 width  = 2;
+}
+
+message Circle  {
+	extend Shape {
+		required Circle shape = 6;
+	}  
+
+	required Point   center = 1;
+	required fixed32 radius = 2;
+}
+
+message Polygon  {
+	extend Shape {
+		required Polygon shape = 7;
+	}  
+
+	repeated Point   points = 1;
+	repeated fixed32 aaa = 2;
+}
+
+message A {
+	message B {
+		message C {
+			extend Shape {
+				required Square shape = 10;
+			}			
+		}
+	}
+}
