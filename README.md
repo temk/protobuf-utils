@@ -6,9 +6,9 @@ classes Message{Input,Ouput}Stream are factories for compressed/plain and binary
 
 ## Command line utiilities
 In the folder 'precompiled' we placed the following:
-* precompiled jar containing all dependencies: protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar
-* simple protocol definition Geom.proto (copied from test/resources)
-* example of compressed binary message stream shapes.bin.gz
+* Precompiled jar containing all dependencies: protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar
+* An example of protocol definition Geom.proto (copied from test/resources)
+* An example of compressed binary message stream shapes.bin.gz
 
 ### Cat
 Command line utility for printing from/to different file formats.
@@ -20,9 +20,10 @@ Flags:
 * -z input is gzipped
 * -t input is text
 * -b input is binary
-* -Z input will gzipped
-* -T input will text
-* -B input will binary
+* -Z gzipped output
+* -T text output 
+* -B binary output
+* -t/-b and -T/-B are mutually exclusive
 
 #### Example: print binary gizpped stream as a text
 cd precompiled
@@ -50,29 +51,31 @@ Options:
 * -T	Optional. Default false. Output format will binary.
 * -d	Optional. Default false. Dry run. I.e. just check syntax.
 
-Notes:
+Syntax essentials:
 * $ current message
 * $$ previous message
-* use any brakets: [] {} ()
+* use any type of brackets: [] {} ()
+* Most java operators can be used in expressions
+* Operator '=~' matches regular expression 
 
-'cd precompiled;, for runexamples
+Run the examples below in the 'precompiled' directory:
 
 #### Example I: find all polygons
 ./proto-grep -zbmq Shape "type == 'POLYGON'" shapes.bin.gz
 
-#### Example II: find all squares where previous two shapes also square. print the first one.
+#### Example II: find all squares where previous two shapes were also square. Print the first one.
 ./proto-grep -zbmq Shape 'type == "SQUARE" && $$.type == "SQUARE" && $$$.type == "SQUARE"' -p '$$$' shapes.bin.gz
 
-#### Example III: find all squares with even width, print corner
+#### Example III: find all squares with even width. Print corner
 ./proto-grep -zbmq Shape 'type == "SQUARE" && shape@Square.width % 2 == 0' -p 'shape@Square.corner' shapes.bin.gz
 
 #### Example IV: find all squares with width > corner.x * corner.y
 ./proto-grep -zbmq Shape 'type == "SQUARE" && shape@Square.width > shape@Square.corner.x * shape@Square.corner.y'  shapes.bin.gz
 
-#### Example V: The same as Example IV, but shorter version. 
+#### Example V: shorter version of Example IV. 
 ./proto-grep -zbmq Shape 'type == "SQUARE" && shape@Square.{width > corner.{x * y}}'  shapes.bin.gz
 
-#### Example VI: Find all polygons with polygons with point i,j s.t. points[i].x > points[i].y , print points indexs, and id of shape.
+#### Example VI: Find all polygons with point i,j s.t. points[i].x > points[i].y , print points indices, and the shape id.
 ./proto-grep -zabmq Shape 'type == "POLYGON" && shape@Polygon.points[i].x >  shape@Polygon.points[j].y' -p 'id,i,j' shapes.bin.gz
 
 #### Example VII: Same as Example VI, but find all appearances. (flag -a)
@@ -82,10 +85,10 @@ Notes:
 TBA
 
 ==============
-Please do not hesitate contact me (boris@temk.org), in case of any questions.
+Please do not hesitate to contact me (boris@temk.org), in case of any questions.
 
 ==============
-Special thanks to Katros Ltd. for allowing to publish this code for public domain.
+Special thanks to Katros Ltd. for allowing me to make this code publicly available.
 
 
 [![githalytics.com alpha](https://cruel-carlota.pagodabox.com/ec0721d2abc3ef980ef6c3275f19133f "githalytics.com")](http://githalytics.com/temk/protobuf-utils)
