@@ -1,3 +1,6 @@
+/**
+   Copyright Katros LTD (2014)
+**/
 package net.katros.services.proto.grep.expr;
 
 import org.antlr.v4.runtime.Token;

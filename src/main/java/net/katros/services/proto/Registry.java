@@ -1,3 +1,6 @@
+/**
+   Copyright Katros LTD (2014)
+**/
 package net.katros.services.proto;
 
 import com.google.common.reflect.ClassPath;
