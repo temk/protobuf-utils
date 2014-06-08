@@ -90,5 +90,3 @@ Please do not hesitate to contact me (boris@temk.org), in case of any questions.
 ==============
 Special thanks to Katros Ltd. for allowing me to make this code publicly available.
 
-
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/ec0721d2abc3ef980ef6c3275f19133f "githalytics.com")](http://githalytics.com/temk/protobuf-utils)
