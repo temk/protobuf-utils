@@ -1,0 +1,200 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen"/>
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>Protobuf-utils</title>
+  <meta name="description" content="">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Protobuf-utils</h1>
+    </header>
+    <div id="container">
+      <p class="tagline"></p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/temk/protobuf-utils/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/temk/protobuf-utils/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/temk/protobuf-utils" class="code">View Protobuf-utils on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h1>
+<a name="google-protocol-buffers-utils" class="anchor" href="#google-protocol-buffers-utils"><span class="octicon octicon-link"></span></a>Google Protocol Buffers' Utils</h1>
+
+<h1></h1>
+
+<h2>
+<a name="streams" class="anchor" href="#streams"><span class="octicon octicon-link"></span></a>Streams</h2>
+
+<p>classes Message{Input,Ouput}Stream are factories for compressed/plain and binary/text message streams.</p>
+
+<h2>
+<a name="command-line-utiilities" class="anchor" href="#command-line-utiilities"><span class="octicon octicon-link"></span></a>Command line utiilities</h2>
+
+<p>In the folder 'precompiled' we placed the following:</p>
+
+<ul>
+<li>Precompiled jar containing all dependencies: protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar</li>
+<li>An example of protocol definition Geom.proto (copied from test/resources)</li>
+<li>An example of compressed binary message stream shapes.bin.gz</li>
+</ul><h3>
+<a name="cat" class="anchor" href="#cat"><span class="octicon octicon-link"></span></a>Cat</h3>
+
+<p>Command line utility for printing from/to different file formats.</p>
+
+<h4>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h4>
+
+<p>net.katros.services.proto.PCat [-zZtTbB] {root-msg} [{input-file}|-]*</p>
+
+<p>Flags:</p>
+
+<ul>
+<li>-z input is gzipped</li>
+<li>-t input is text</li>
+<li>-b input is binary</li>
+<li>-Z gzipped output</li>
+<li>-T text output </li>
+<li>-B binary output</li>
+<li>-t/-b and -T/-B are mutually exclusive</li>
+</ul><h4>
+<a name="example-print-binary-gizpped-stream-as-a-text" class="anchor" href="#example-print-binary-gizpped-stream-as-a-text"><span class="octicon octicon-link"></span></a>Example: print binary gizpped stream as a text</h4>
+
+<p>cd precompiled
+java -cp geim.jar:protobuf-utils-1.0-SNAPSHOT-jar-with-dependencies.jar net.katros.services.proto.PCat -zbT Shape shapes.bin.gz</p>
+
+<h3>
+<a name="grep" class="anchor" href="#grep"><span class="octicon octicon-link"></span></a>Grep</h3>
+
+<p>Command line utility for searching messages within file(s).</p>
+
+<h4>
+<a name="usage-1" class="anchor" href="#usage-1"><span class="octicon octicon-link"></span></a>Usage</h4>
+
+<p>net.katros.services.proto.PGrep  [options]* {input-file}*</p>
+
+<p>Options: </p>
+
+<ul>
+<li>-q {&lt;query-expression}    Mandatory. Should apear only once.</li>
+<li>-p {print-expression} Optional. Default is "$". Can apear several times.</li>
+<li>-d {delimiter}    Optional. Default is "-"</li>
+<li>-o {output-file}  Optional. Default is "-"</li>
+<li>-m {message-name&gt; Mandatory. Root message.</li>
+<li>-z    Optional. Default false. Input is gzipped.</li>
+<li>-Z    Optional. Default false. Output will gzipped.</li>
+<li>-t    Optional. Default false. Input format assumed text.</li>
+<li>-T    Optional. Default true.  Output format will text.</li>
+<li>-b    Optional. Default true.  Input format assumed binary.</li>
+<li>-B    Optional. Default false. Output format will binary.</li>
+<li>-t    Optional. Default true.  Input format assumed binary.</li>
+<li>-T    Optional. Default false. Output format will binary.</li>
+<li>-d    Optional. Default false. Dry run. I.e. just check syntax.</li>
+</ul><p>Syntax essentials:</p>
+
+<ul>
+<li>$ current message</li>
+<li>$$ previous message</li>
+<li>use any type of brackets: [] {} ()</li>
+<li>Most java operators can be used in expressions</li>
+<li>Operator '=~' matches regular expression </li>
+</ul><p>Run the examples below in the 'precompiled' directory:</p>
+
+<h4>
+<a name="example-i-find-all-polygons" class="anchor" href="#example-i-find-all-polygons"><span class="octicon octicon-link"></span></a>Example I: find all polygons</h4>
+
+<p>./proto-grep -zbmq Shape "type == 'POLYGON'" shapes.bin.gz</p>
+
+<h4>
+<a name="example-ii-find-all-squares-where-previous-two-shapes-were-also-square-print-the-first-one" class="anchor" href="#example-ii-find-all-squares-where-previous-two-shapes-were-also-square-print-the-first-one"><span class="octicon octicon-link"></span></a>Example II: find all squares where previous two shapes were also square. Print the first one.</h4>
+
+<p>./proto-grep -zbmq Shape 'type == "SQUARE" &amp;&amp; $$.type == "SQUARE" &amp;&amp; $$$.type == "SQUARE"' -p '$$$' shapes.bin.gz</p>
+
+<h4>
+<a name="example-iii-find-all-squares-with-even-width-print-corner" class="anchor" href="#example-iii-find-all-squares-with-even-width-print-corner"><span class="octicon octicon-link"></span></a>Example III: find all squares with even width. Print corner</h4>
+
+<p>./proto-grep -zbmq Shape 'type == "SQUARE" &amp;&amp; <a href="mailto:shape@Square.width">shape@Square.width</a> % 2 == 0' -p '<a href="mailto:shape@Square.corner">shape@Square.corner</a>' shapes.bin.gz</p>
+
+<h4>
+<a name="example-iv-find-all-squares-with-width--cornerx--cornery" class="anchor" href="#example-iv-find-all-squares-with-width--cornerx--cornery"><span class="octicon octicon-link"></span></a>Example IV: find all squares with width &gt; corner.x * corner.y</h4>
+
+<p>./proto-grep -zbmq Shape 'type == "SQUARE" &amp;&amp; <a href="mailto:shape@Square.width">shape@Square.width</a> &gt; <a href="mailto:shape@Square.corner.x">shape@Square.corner.x</a> * <a href="mailto:shape@Square.corner.y">shape@Square.corner.y</a>'  shapes.bin.gz</p>
+
+<h4>
+<a name="example-v-shorter-version-of-example-iv" class="anchor" href="#example-v-shorter-version-of-example-iv"><span class="octicon octicon-link"></span></a>Example V: shorter version of Example IV.</h4>
+
+<p>./proto-grep -zbmq Shape 'type == "SQUARE" &amp;&amp; <a href="mailto:shape@Square">shape@Square</a>.{width &gt; corner.{x * y}}'  shapes.bin.gz</p>
+
+<h4>
+<a name="example-vi-find-all-polygons-with-point-ij-st-pointsix--pointsiy--print-points-indices-and-the-shape-id" class="anchor" href="#example-vi-find-all-polygons-with-point-ij-st-pointsix--pointsiy--print-points-indices-and-the-shape-id"><span class="octicon octicon-link"></span></a>Example VI: Find all polygons with point i,j s.t. points[i].x &gt; points[i].y , print points indices, and the shape id.</h4>
+
+<p>./proto-grep -zabmq Shape 'type == "POLYGON" &amp;&amp; <a href="mailto:shape@Polygon.points">shape@Polygon.points</a>[i].x &gt;  <a href="mailto:shape@Polygon.points">shape@Polygon.points</a>[j].y' -p 'id,i,j' shapes.bin.gz</p>
+
+<h4>
+<a name="example-vii-same-as-example-vi-but-find-all-appearances-flag--a" class="anchor" href="#example-vii-same-as-example-vi-but-find-all-appearances-flag--a"><span class="octicon octicon-link"></span></a>Example VII: Same as Example VI, but find all appearances. (flag -a)</h4>
+
+<p>./proto-grep -zabmq Shape  'type == "POLYGON" &amp;&amp; <a href="mailto:shape@Polygon.points">shape@Polygon.points</a>[i].x &gt;  <a href="mailto:shape@Polygon.points">shape@Polygon.points</a>[j].y' -p 'id,i,j' shapes.bin.gz</p>
+
+<h2>
+<a name="faq" class="anchor" href="#faq"><span class="octicon octicon-link"></span></a>FAQ</h2>
+
+<p>TBA</p>
+
+<h1></h1>
+
+<p>Please do not hesitate to contact me (<a href="mailto:boris@temk.org">boris@temk.org</a>), in case of any questions.</p>
+
+<h1></h1>
+
+<p>Special thanks to Katros Ltd. for allowing me to make this code publicly available.</p>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/temk" class="avatar"><img src="https://avatars2.githubusercontent.com/u/5168438?s=60" width="48" height="48"/></a> <a href="https://github.com/temk">temk</a> maintains <a href="https://github.com/temk/protobuf-utils">Protobuf-utils</a></p>
+
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="http://pages.github.com/">GitHub Pages</a><br/>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/temk/protobuf-utils/tarball/master" class="tar">tar</a><a href="https://github.com/temk/protobuf-utils/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-43939319-3");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+</body>
+</html>
