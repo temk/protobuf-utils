@@ -42,11 +42,12 @@ public abstract class Printer {
             @Override
             public void print() {
                 try {
-                    ps.println(strExpr.eval());
-                    ps.println(delim);
+                    ps.print(strExpr.eval());
+                } catch (NoFieldException ex) {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                ps.print(delim);
             }
         };
     }
@@ -119,7 +120,17 @@ public abstract class Printer {
                         "Unexpected expression type: " + expr.getType());
         }
 
-        return printer;
+        return new Printer() {
+
+            @Override
+            public void print() {
+                try {
+                    printer.print();
+                } catch(NoFieldException ex) {
+                    list.add(null);
+                }
+            }
+        };
     }
 
 }

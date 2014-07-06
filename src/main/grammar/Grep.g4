@@ -22,8 +22,16 @@ print
     ;
 
 print_expr
-    : expr (',' expr)* 
-    | scope '[' print_expr ']'
+    : print_part (',' print_part)*
+    ;
+
+print_part
+    : scoped_print
+    | expr
+    ;
+     
+scoped_print
+    : scope '[' print_expr ']'
     | scope '(' print_expr ')'
     | scope '{' print_expr '}'
     ;
@@ -226,10 +234,6 @@ COUNT
     : '#'
     ;
 
-ID
-    : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*
-    ;
-
 VARIABLE
     : '$' ID
     ;
@@ -260,6 +264,10 @@ FLOAT
 STRING	
     : '"' ( ~["] )* '"' 
     | '\'' ( ~[\'] )* '\''
+    ;
+
+ID
+    : ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*
     ;
 
 WS

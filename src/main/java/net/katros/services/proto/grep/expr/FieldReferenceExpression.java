@@ -39,7 +39,11 @@ public class FieldReferenceExpression implements Expression {
                 expr = new ObjectExpression(fd.getMessageType()) {
                     @Override
                     public MessageOrBuilder eval() {
-                        return MessageOrBuilder.class.cast(parent.eval().getField(fd));
+                        MessageOrBuilder b = parent.eval();
+                        if (!b.hasField(fd)) {
+                            throw new NoFieldException(fd);
+                        }
+                        return MessageOrBuilder.class.cast(b.getField(fd));
                     }
 
             @Override
@@ -53,7 +57,11 @@ public class FieldReferenceExpression implements Expression {
                 expr = new StringExpression() {
                     @Override
                     public String eval() {
-                        EnumValueDescriptor eval = EnumValueDescriptor.class.cast(parent.eval().getField(fd));
+                        MessageOrBuilder b = parent.eval();
+                        if (!b.hasField(fd)) {
+                            throw new NoFieldException(fd);
+                        }
+                        EnumValueDescriptor eval = EnumValueDescriptor.class.cast(b.getField(fd));
                         return eval.getName();
                     }
                 };
@@ -64,7 +72,11 @@ public class FieldReferenceExpression implements Expression {
                 expr = new StringExpression() {
                     @Override
                     public String eval() {
-                        return parent.eval().getField(fd).toString();
+                        MessageOrBuilder b = parent.eval();
+                        if (!b.hasField(fd)) {
+                            throw new NoFieldException(fd);
+                        }
+                        return b.getField(fd).toString();
                     }
                 };
                 break;
@@ -74,7 +86,11 @@ public class FieldReferenceExpression implements Expression {
 
                     @Override
                     public boolean eval() {
-                        return Boolean.class.cast(parent.eval().getField(fd));
+                        MessageOrBuilder b = parent.eval();
+                        if (!b.hasField(fd)) {
+                            throw new NoFieldException(fd);
+                        }
+                        return Boolean.class.cast(b.getField(fd));
                     }
                 };
                 break;
@@ -84,7 +100,11 @@ public class FieldReferenceExpression implements Expression {
 
                     @Override
                     public double eval() {
-                        return Float.class.cast(parent.eval().getField(fd));
+                        MessageOrBuilder b = parent.eval();
+                        if (!b.hasField(fd)) {
+                            throw new NoFieldException(fd);
+                        }
+                        return Float.class.cast(b.getField(fd));
                     }
                 };
                 break;
@@ -94,19 +114,27 @@ public class FieldReferenceExpression implements Expression {
 
                     @Override
                     public double eval() {
-                        return Double.class.cast(parent.eval().getField(fd));
+                        MessageOrBuilder b = parent.eval();
+                        if (!b.hasField(fd)) {
+                            throw new NoFieldException(fd);
+                        }
+                        return Double.class.cast(b.getField(fd));
                     }
                 };
                 break;
 
             case INT:
-                    expr = new LongExpression() {
+                expr = new LongExpression() {
 
-                        @Override
-                        public long eval() {
-                            return Integer.class.cast(parent.eval().getField(fd));
+                    @Override
+                    public long eval() {
+                        MessageOrBuilder b = parent.eval();
+                        if (!b.hasField(fd)) {
+                            throw new NoFieldException(fd);
                         }
-                    };
+                        return Integer.class.cast(b.getField(fd));
+                    }
+                };
                 break;
                 
             case LONG:
@@ -114,7 +142,11 @@ public class FieldReferenceExpression implements Expression {
 
                     @Override
                     public long eval() {
-                        return Long.class.cast(parent.eval().getField(fd));
+                        MessageOrBuilder b = parent.eval();
+                        if (!b.hasField(fd)) {
+                            throw new NoFieldException(fd);
+                        }
+                        return Long.class.cast(b.getField(fd));
                     }
                 };
                 break;

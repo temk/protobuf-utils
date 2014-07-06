@@ -25,18 +25,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.katros.services.proto.grep.expr.NoFieldException;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * @author boris@temk.org
 **/
 public class GrepProcessor {
-    private String delim = "--";
+    private String delimRecord = "--";
+    private String delimFields = ",";
     
-    private String queryStr;
+    private String queryStr = "true";
     private List<String> printStr = new ArrayList<>();
 
     private List<MessageInputStream> input = new ArrayList<>();
@@ -88,7 +91,7 @@ public class GrepProcessor {
     }
     
     public void setDelimiter(String delim) {
-        this.delim = delim;
+        this.delimRecord = delim;
     }
 
     public void setRootMessage(Descriptor descriptor) {
@@ -98,18 +101,20 @@ public class GrepProcessor {
     public static void usage() {
         System.err.println("Usage: GrepProcessor [options]* <input-file>*\n" + 
         "Options: \n" + 
-        "\t-q <query-expression>\tMandatory. Should apear only one time.\n" + 
+        "\t-q <query-expression>\tOptional. Default 'true'. Should apear at most once.\n" + 
         "\t-p <print-expression>\tOptional. Default is \"$\". Can apear several times.\n" + 
         "\t-d <delimiter>\tOptional. Default is \"-\"\n" + 
         "\t-o <output-file>\tOptional. Default is \"-\"\n" + 
         "\t-m <message-name>\tMandatory.\n" + 
+        "\t-d <field-delim>\tOptional. Default ','.\n" + 
+        "\t-D <message-delim>\tOptional. Default '--'\n" + 
         "\t-z\tOptional. Default false. Input assumend gzipped.\n" + 
         "\t-Z\tOptional. Default false. Output will gzipped.\n" + 
         "\t-t\tOptional. Default false. Input format assumed text.\n" + 
         "\t-T\tOptional. Default true.  Output format will text.\n" + 
         "\t-t\tOptional. Default true.  Input format assumed binary.\n" + 
         "\t-T\tOptional. Default false. Output format will binary.\n" + 
-        "\t-d\tOptional. Default false. Dry run. I.e. just check syntax.\n" + 
+        "\t-e\tOptional. Default false. Dry run. I.e. just check syntax.\n" + 
         "\n" + 
         "flags can be grouped. File name '-' means stdin/stdout depends on context.\n" + 
         "\n" + 
@@ -136,11 +141,14 @@ public class GrepProcessor {
 
     private boolean eval(IndexReference[] indexes, int i) {
         if (i == indexes.length) {
-            if (query.eval()) {
-                print();
-                return true;
+            try {
+                if (query.eval()) {
+                    print();
+                    return true;
+                }
+            } catch(NoFieldException ex) {
+                return false;
             }
-            
             return false;
         }
 
@@ -206,8 +214,9 @@ public class GrepProcessor {
 
         query = queryExtractor.getQueryExpression();
 
+        List<Expression> pexprs = new ArrayList<>();
         for (String str : printStr) {
-            GrepParser printParser = parse(str);
+            GrepParser printParser = parse(str); 
             ParserRuleContext printTree = printParser.print();
 
             GrepExpressionListener printExtractor = new GrepExpressionListener(registry, rootMessage, rootPool, indexPool);
@@ -218,17 +227,20 @@ public class GrepProcessor {
                 return false;
             }
 
-            for (Expression e: printExtractor.getPrintExpressions()) {
-                if (messageOutput != null) {
-                    printers.add(Printer.createPrinter(messageOutput, e));
-                } else if (printOutput != null) {
-                    printers.add(Printer.createPrinter(printOutput, e, delim));
-                } else if (listOutput != null) {
-                    printers.add(Printer.createPrinter(listOutput, e));
-                }
-            }
+            printExtractor.getPrintExpressions(pexprs);
         }
         
+        for (int k = 0; k < pexprs.size(); ++ k) {
+            Expression e = pexprs.get(k);
+            if (messageOutput != null) {
+                printers.add(Printer.createPrinter(messageOutput, e));
+            } else if (printOutput != null) {
+                printers.add(Printer.createPrinter(printOutput, e, k == pexprs.size() - 1 ? delimRecord : delimFields));
+            } else if (listOutput != null) {
+                printers.add(Printer.createPrinter(listOutput, e));
+            }
+        }
+            
         indexPool.build();
         return true;
     }
@@ -302,6 +314,14 @@ public class GrepProcessor {
                     break;
                     
                 case 'd':
+                    delimFields = StringEscapeUtils.unescapeJava(params.get(idx++));
+                    break;
+                    
+                case 'D':
+                    delimRecord = StringEscapeUtils.unescapeJava(params.get(idx++));
+                    break;
+                    
+                case 'e':
                     dryFlag = true;
                     break;
                     
@@ -312,7 +332,7 @@ public class GrepProcessor {
                     
                 default:
                     throw new RuntimeException("Unexpected key " + c);
-            }
+            }            
         }
 
         MessageOrBuilder msg = Registry.getInstance().getInstanceForType(inputMessage);

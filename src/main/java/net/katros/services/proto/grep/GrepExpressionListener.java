@@ -62,14 +62,26 @@ public class GrepExpressionListener extends GrepBaseListener {
         return BooleanExpression.class.cast(dereference(null, stack.pop(), null));
     }
     
-    public List<Expression> getPrintExpressions() {        
-        List<Expression> result = new ArrayList<>();
+    public List<Expression> getPrintExpressions(List<Expression> result) {        
         for (Expression expr: stack) {
             result.add(dereference(null, expr, null));
         }
         stack.clear();
         return result;
     }
+
+    @Override
+    public void exitScoped_print(Scoped_printContext ctx) {
+        scope.pop();
+    }
+    
+//    @Override
+//    public void exitPrint_part(Print_partContext ctx) {
+//        scope.push(rootPool.getRoot(0));
+//    }
+    
+    
+    
     
     private Expression dereference(Token token, Expression expr, Expression idx) {
         if (expr.getType() == FIELD_REFERENCE) {

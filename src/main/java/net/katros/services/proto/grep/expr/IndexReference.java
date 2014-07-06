@@ -31,7 +31,11 @@ public class IndexReference extends LongExpression implements Comparable<IndexRe
     }
  
     public final long range() {
-        return parent.eval();
+         try {
+             return parent.eval();
+         } catch(NoFieldException ex) {
+             return 0;
+         }
     }
 
     private int depth() {

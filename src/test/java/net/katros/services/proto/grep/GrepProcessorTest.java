@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  * @author boris@temk.org
@@ -125,7 +126,7 @@ public class GrepProcessorTest {
         GrepProcessor grep = new GrepProcessor();
         grep.setInputStream(inputStream());
         grep.setQueryString("id == 12");
-        grep.setPrintStrings("shape@Polygon.points.[x,y]");
+        grep.setPrintStrings("shape@Polygon.points.[x,y],id");
         grep.setListOutput(list);
         grep.setFindAll(true);
         grep.setRootMessage(Shape.getDescriptor());
@@ -133,10 +134,42 @@ public class GrepProcessorTest {
         assertTrue(grep.parse());
         grep.run();
         
-        assertArrayEquals(list.toArray(), new Long [] {0L,0L,1L,2L});
+        assertArrayEquals(list.toArray(), new Long [] {0L,0L,12L, 1L,2L, 12L});
     }
     
+    @Test
+    public void test8() throws Exception {
+        List list = new ArrayList();
+        
+        GrepProcessor grep = new GrepProcessor();
+        grep.setInputStream(inputStream());
+        grep.setQueryString("shape@Polygon.points[i] == $$.shape@Polygon.points[j]");
+        grep.setPrintStrings("$$.id, $.id");
+        grep.setListOutput(list);
+        grep.setRootMessage(Shape.getDescriptor());
+        
+        assertTrue(grep.parse());
+        grep.run();
+        
+        assertArrayEquals(list.toArray(), new Long [] {11L,12L,12L,13L,13L,14L});
+    }
     
-    
+    @Test
+    public void test9() throws Exception {
+        List list = new ArrayList();
+        
+        GrepProcessor grep = new GrepProcessor();
+        grep.setInputStream(inputStream());
+        grep.setQueryString("id == 1");
+        grep.setPrintStrings("shape@Polygon");
+        grep.setListOutput(list);
+        grep.setRootMessage(Shape.getDescriptor());
+        
+        assertTrue(grep.parse());
+        grep.run();
+        
+        assertTrue(list.size() == 1);
+        assertNull(list.get(0));
+    }
     
 }
