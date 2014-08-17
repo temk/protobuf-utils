@@ -36,7 +36,7 @@ import org.apache.commons.lang.StringEscapeUtils;
  * @author boris@temk.org
 **/
 public class GrepProcessor {
-    private String delimRecord = "--";
+    private String delimRecord = "--\n";
     private String delimFields = ",";
     
     private String queryStr = "true";
